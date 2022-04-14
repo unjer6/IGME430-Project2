@@ -1,6 +1,6 @@
 // controllers for post data management (creating, likes, dislikes)
 const models = require('../models');
-const { Post } = models;
+//const { Post } = models;
 
 // makes a new post
 const makePost = () => {};
@@ -35,7 +35,8 @@ const getLiked = () => {};
 //   try {
 //     const newDomo = new Domo(domoData);
 //     await newDomo.save();
-//     return res.status(201).json({ name: newDomo.name, age: newDomo.age, height: newDomo.height });
+//     return res.status(201)
+//      .json({ name: newDomo.name, age: newDomo.age, height: newDomo.height });
 //   } catch (err) {
 //     console.log(err);
 //     if (err.code === 11000) {
