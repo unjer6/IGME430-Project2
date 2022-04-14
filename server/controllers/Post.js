@@ -1,5 +1,5 @@
 // controllers for post data management (creating, likes, dislikes)
-const models = require('../models');
+//const models = require('../models');
 //const { Post } = models;
 
 // makes a new post
