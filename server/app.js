@@ -13,23 +13,18 @@ const redis = require('redis');
 const csrf = require('csurf');
 
 const router = require('./router.js');
+const config = require('./config.js');
 
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
-
-const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/DomoMaker';
-mongoose.connect(dbURI, (err) => {
+mongoose.connect(config.connections.mongo, (err) => {
   if (err) {
     console.log('Could not connect to database');
     throw err;
   }
 });
 
-const redisURL = process.env.REDISCLOUD_URL
-  || 'redis://default:ezHCrNQveDC63TZ8PNkdyTe2vIgm9XPt@redis-17019.c16.us-east-1-2.ec2.cloud.redislabs.com:17019';
-
 const redisClient = redis.createClient({
   legacyMode: true,
-  url: redisURL,
+  url: config.connections.redis,
 });
 redisClient.connect().catch(console.error);
 
@@ -39,8 +34,11 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: false,
 }));
+
+// this could use config vars, but I have no need for development only static files
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
+
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -50,7 +48,7 @@ app.use(session({
   store: new RedisStore({
     client: redisClient,
   }),
-  secret: 'Domo Arigato',
+  secret: config.secret,
   resave: true,
   saveUninitialized: true,
   cookie: {
@@ -73,7 +71,7 @@ app.use((err, req, res, next) => {
 
 router(app);
 
-app.listen(port, (err) => {
+app.listen(config.connections.http.port, (err) => {
   if (err) { throw err; }
-  console.log(`Listening on port ${port}`);
+  console.log(`Listening on port ${config.connections.http.port}`);
 });

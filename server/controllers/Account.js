@@ -1,9 +1,9 @@
+// controllers for account management
 const models = require('../models');
-
 const { Account } = models;
 
 const loginPage = (req, res) => {
-  res.render('login', { csrfToken: req.csrfToken() });
+  res.render('login');
 };
 
 const logout = (req, res) => {
@@ -26,7 +26,7 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/' });
   });
 };
 
@@ -48,7 +48,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {

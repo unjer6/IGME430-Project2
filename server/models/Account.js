@@ -33,6 +33,26 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // so that you cannot like or dislike a post multiple times
+  likes: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Post'
+  }],
+  dislikes: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Post'
+  }],
+  // what accounts this account follows
+  following: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Account'
+  }],
+  // how MANY people follow this account
+  followers: {
+    type: Number,
+    min: 0,
+    default: 0,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
