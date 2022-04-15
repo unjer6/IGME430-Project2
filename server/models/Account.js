@@ -1,26 +1,10 @@
-/* This file defines our schema and model interface for the account data.
-
-   We first import bcrypt and mongoose into the file. bcrypt is an industry
-   standard tool for encrypting passwords. Mongoose is our tool for
-   interacting with our mongo database.
-*/
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-/* When generating a password hash, bcrypt (and most other password hash
-   functions) use a "salt". The salt is simply extra data that gets hashed
-   along with the password. The addition of the salt makes it more difficult
-   for people to decrypt the passwords stored in our database. saltRounds
-   essentially defines the number of times we will hash the password and salt.
-*/
 const saltRounds = 10;
 
 let AccountModel = {};
 
-/* Our schema defines the data we will store. A username (string of alphanumeric
-   characters), a password (actually the hashed version of the password created
-   by bcrypt), and the created date.
-*/
 const AccountSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -36,16 +20,16 @@ const AccountSchema = new mongoose.Schema({
   // so that you cannot like or dislike a post multiple times
   likes: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'Post'
+    ref: 'Post',
   }],
   dislikes: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'Post'
+    ref: 'Post',
   }],
   // what accounts this account follows
   following: [{
     type: mongoose.Schema.ObjectId,
-    ref: 'Account'
+    ref: 'Account',
   }],
   // how MANY people follow this account
   followers: {
@@ -60,10 +44,12 @@ const AccountSchema = new mongoose.Schema({
 });
 
 // Converts a doc to something we can store in redis later on.
-AccountSchema.statics.toAPI = (doc) => ({
-  username: doc.username,
-  _id: doc._id,
-});
+AccountSchema.methods.toAPI = function () {
+  return {
+    username: this.username,
+    _id: this._id,
+  };
+};
 
 // Helper function to hash a password
 AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRounds);

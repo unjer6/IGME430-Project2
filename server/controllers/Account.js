@@ -1,5 +1,6 @@
 // controllers for account management
 const models = require('../models');
+
 const { Account } = models;
 
 const loginPage = (req, res) => {
@@ -24,7 +25,7 @@ const login = (req, res) => {
       return res.status(401).json({ error: 'Wrong username or password!' });
     }
 
-    req.session.account = Account.toAPI(account);
+    req.session.account = account.toAPI();
 
     return res.json({ redirect: '/' });
   });
@@ -47,7 +48,7 @@ const signup = async (req, res) => {
     const hash = await Account.generateHash(pass);
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
-    req.session.account = Account.toAPI(newAccount);
+    req.session.account = newAccount.toAPI();
     return res.json({ redirect: '/' });
   } catch (err) {
     console.log(err);

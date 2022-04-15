@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-let PostModel = {};
-
 const PostSchema = new mongoose.Schema({
   content: {
     type: String,
@@ -28,19 +26,19 @@ const PostSchema = new mongoose.Schema({
   },
 });
 
-PostSchema.static.toAPI = (doc) => ({
-  content: doc.content,
-  likes: doc.likes,
-  dislikes: doc.dislikes,
-});
+// PostSchema.static.toAPI = (doc) => ({
+//   content: doc.content,
+//   likes: doc.likes,
+//   dislikes: doc.dislikes,
+// });
 
-PostSchema.statics.findByOwner = (ownerId, callback) => {
-  const search = {
-    owner: mongoose.Types.ObjectId(ownerId),
-  };
+// PostSchema.statics.findByOwner = (ownerId, callback) => {
+//   const search = {
+//     owner: mongoose.Types.ObjectId(ownerId),
+//   };
 
-  return PostModel.find(search).select('content likes dislikes').lean().exec(callback);
-};
+//   return PostModel.find(search).select('content likes dislikes').lean().exec(callback);
+// };
 
 // PostSchema.statics.deleteByOwnerAndName = (ownerId, name, callback) => {
 //   const search = {
@@ -51,6 +49,6 @@ PostSchema.statics.findByOwner = (ownerId, callback) => {
 //   return DomoModel.deleteOne(search).exec(callback);
 // };
 
-PostModel = mongoose.model('Post', PostSchema);
+const PostModel = mongoose.model('Post', PostSchema);
 
 module.exports = PostModel;
