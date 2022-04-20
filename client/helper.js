@@ -3,8 +3,8 @@
    end in an error.
 */
 const handleError = (message) => {
-    document.getElementById('errorMessage').textContent = message;
-    document.getElementById('domoMessage').classList.remove('hidden');
+    //document.getElementById('errorMessage').textContent = message;
+    //document.getElementById('domoMessage').classList.remove('hidden');
 };
 
 /* Sends post requests to the server using fetch. Will look for various
@@ -20,8 +20,7 @@ const sendPost = async (url, data, handler) => {
     });
 
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
-
+    
     if(result.redirect) {
         window.location = result.redirect;
     }
@@ -35,8 +34,8 @@ const sendPost = async (url, data, handler) => {
     }
 };
 
-const sendDelete = async (url, data) => {
-    const response = await fetch(url, {
+const sendDelete = (url, data) => {
+    fetch(url, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -46,7 +45,7 @@ const sendDelete = async (url, data) => {
 };
 
 const hideError = () => {
-    document.getElementById('domoMessage').classList.add('hidden');
+    //document.getElementById('domoMessage').classList.add('hidden');
 };
 
 module.exports = {

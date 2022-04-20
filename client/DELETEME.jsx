@@ -1,84 +1,101 @@
 const helper = require('./helper.js');
 
-const handleLogin = (e) => {
+const handleDomo = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const username = e.target.querySelector('#user').value;
-    const pass = e.target.querySelector('#pass').value;
+    const name = e.target.querySelector('#domoName').value;
+    const age = e.target.querySelector('#domoAge').value;
+    const height = e.target.querySelector('#domoHeight').value;
     const _csrf = e.target.querySelector('#_csrf').value;
 
-    if(!username || !pass) {
-        helper.handleError('Username or password is empty!');
+    if(!name || !age){
+        helper.handleError('All fields are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {username, pass, _csrf});
+    helper.sendPost(e.target.action, {name, age, height, _csrf}, loadDomosFromServer);
 
     return false;
 }
 
-const handleSignup = (e) => {
+const handleDelete = async (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const username = e.target.querySelector('#user').value;
-    const pass = e.target.querySelector('#pass').value;
-    const pass2 = e.target.querySelector('#pass2').value;
-    const _csrf = e.target.querySelector('#_csrf').value;
+    const name = e.currentTarget.dataset.name;
+    const _csrf = document.querySelector('#domoForm').querySelector('#_csrf').value;
+    
+    await helper.sendDelete(e.currentTarget.href, { name, _csrf });
 
-    if(!username || !pass || !pass2) {
-        helper.handleError('Username or password is empty!');
-        return false;
-    }
-
-    if(pass !== pass2) {
-        helper.handleError('Passwords do not match!');
-        return false;
-    }
-
-    helper.sendPost(e.target.action, {username, pass, pass2, _csrf});
+    loadDomosFromServer();
 
     return false;
 }
 
-const LoginWindow = (props) => {
+const DomoForm = (props) => {
     return (
-        <form id="loginForm"
-            name="loginForm"
-            onSubmit={handleLogin}
-            action="/login"
+        <form id="domoForm"
+            onSubmit={handleDomo}
+            name="domoForm"
+            action="/maker"
             method="POST"
-            className="mainForm"
+            className="domoForm"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
+            <div>
+                <label htmlFor="name">Name: </label>
+                <input id="domoName" type="text" name="name" placeholder="Domo Name" />
+            </div>
+            <div>
+                <label htmlFor="age">Age: </label>
+                <input id="domoAge" type="number" min="0" name="age" />
+            </div>
+            <div>
+                <label htmlFor="height">Height: </label>
+                <input id="domoHeight" type="number" min="0" name="height" />
+            </div>
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign in" />
+            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
     );
 };
 
-const SignupWindow = (props) => {
+const DomoList = (props) => {
+    if(props.domos.length === 0) {
+        return (
+            <div className="domoList">
+                <h3 className="emptyDomo">No Domos Yet!</h3>
+            </div>
+        );
+    }
+
+    const domoNodes = props.domos.map(domo => {
+        return (
+            <div key={domo._id} className="domo">
+                <div className="domoFlex">
+                    <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+                    <h3 className="domoName"> Name: {domo.name} </h3>
+                    <h3 className="domoAge"> Age: {domo.age} </h3>
+                    <h3 className="domoHeight"> Height: {domo.height} </h3>
+                </div>
+                <a id="domoDelete" href="/deleteDomo" data-name={domo.name} onClick={handleDelete}><img src="/assets/img/trash.png" alt="trash can" className="domoTrash" /></a>
+            </div>
+        );
+    });
+
     return (
-        <form id="signupForm"
-            name="signupForm"
-            onSubmit={handleSignup}
-            action="/signup"
-            method="POST"
-            className="mainForm"
-        >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
-            <label htmlFor="pass2">Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="retype password" />
-            <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign up" />
-        </form>
+        <div className="domoList">
+            {domoNodes}
+        </div>
+    );
+};
+
+const loadDomosFromServer = async () => {
+    const response = await fetch('/getDomos');
+    const data = await response.json();
+    ReactDOM.render(
+        <DomoList domos={data.domos} />,
+        document.getElementById('domos')
     );
 };
 
@@ -86,25 +103,17 @@ const init = async () => {
     const response = await fetch('/getToken');
     const data = await response.json();
 
-    const loginButton = document.getElementById('loginButton');
-    const signupButton = document.getElementById('signupButton');
+    ReactDOM.render(
+        <DomoForm csrf={data.csrfToken} />,
+        document.getElementById('makeDomo')
+    );
 
-    loginButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        ReactDOM.render(<LoginWindow csrf={data.csrfToken} />,
-            document.getElementById('content'));
-        return false;
-    });
+    ReactDOM.render(
+        <DomoList domos={[]} />,
+        document.getElementById('domos')
+    );
 
-    signupButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        ReactDOM.render(<SignupWindow csrf={data.csrfToken} />,
-            document.getElementById('content'));
-        return false;
-    });
-
-    ReactDOM.render(<LoginWindow csrf={data.csrfToken} />,
-        document.getElementById('content'));
+    loadDomosFromServer();
 };
 
 window.onload = init;

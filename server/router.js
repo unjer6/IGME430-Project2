@@ -4,6 +4,9 @@ const mid = require('./middleware');
 const router = (app) => {
   // database request and session request routes
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
+  app.get('/getTemplates', controllers.App.getTemplates);
+  app.get('/getConjunctions', controllers.App.getConjunctions);
+  app.get('/getPhrases', controllers.App.getPhrases);
   app.get('/getRecent', controllers.Post.getRecent);
   app.get('/getPopular', controllers.Post.getPopular);
   app.get('/getFollowing', mid.requiresLogin, controllers.Post.getFollowing);
@@ -23,6 +26,8 @@ const router = (app) => {
 
   // THE app home page. Contains post feed
   app.get('/', controllers.App.appPage);
+  // the account page
+  app.get('/account', controllers.App.accountPage);
 
   // leaving this here as a reminder that we may redirect here from other routes if necessary
   app.get('/notFound', controllers.notFoundPage);
