@@ -8,12 +8,12 @@ const getTemplates = () => {};
 
 const getConjunctions = () => {};
 
-const getPhrases = () => {};
+const getWords = () => {};
 
 module.exports = {
   appPage,
   accountPage,
   getTemplates,
   getConjunctions,
-  getPhrases,
+  getWords,
 };

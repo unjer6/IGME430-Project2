@@ -5,8 +5,8 @@ const router = (app) => {
   // database request and session request routes
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/getTemplates', controllers.App.getTemplates);
+  app.get('/getWords', controllers.App.getWords);
   app.get('/getConjunctions', controllers.App.getConjunctions);
-  app.get('/getPhrases', controllers.App.getPhrases);
   app.get('/getRecent', controllers.Post.getRecent);
   app.get('/getPopular', controllers.Post.getPopular);
   app.get('/getFollowing', mid.requiresLogin, controllers.Post.getFollowing);

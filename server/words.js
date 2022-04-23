@@ -33,7 +33,7 @@ const conjunctions = [
     ','
 ];
 
-const categories = {
+const words = {
     'Creatures': [
         'enemy',
         'monster',
@@ -371,5 +371,5 @@ const categories = {
 module.exports = {
     templates,
     conjunctions,
-    categories,
+    words,
 }
