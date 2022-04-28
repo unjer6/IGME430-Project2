@@ -7,7 +7,7 @@ const SignupForm = ({ csrf }) => {
         helper.hideSuccessAndError();
 
         const username = e.target.querySelector('#username').value;
-        const pass = e.target.querySelector('#password').value;
+        const pass = e.target.querySelector('#password1').value;
         const pass2 = e.target.querySelector('#password2').value;
         const _csrf = e.target.querySelector('#_csrf').value;
     
