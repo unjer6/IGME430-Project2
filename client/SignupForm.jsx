@@ -4,7 +4,7 @@ const helper = require('./helper.js');
 const SignupForm = ({ csrf }) => {
     const handleSignup = (e) => {
         e.preventDefault();
-        helper.hideError();
+        helper.hideSuccessAndError();
 
         const username = e.target.querySelector('#username').value;
         const pass = e.target.querySelector('#password').value;
