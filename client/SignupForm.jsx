@@ -30,7 +30,7 @@ const SignupForm = ({ csrf }) => {
         <>
         <form
             onSubmit={handleSignup}
-            action="/login"
+            action="/signup"
             method="POST"
         >
             <legend>Sign Up</legend>
