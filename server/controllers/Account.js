@@ -61,10 +61,63 @@ const signup = async (req, res) => {
 
 const getToken = (req, res) => res.json({ csrfToken: req.csrfToken() });
 
+const isLoggedIn = (req, res) => {
+  if (req.session.account) return res.json({ result: true });
+
+  return res.json({ result: false });
+};
+
+const getUsername = (req, res) => res.json({ username: req.session.account.username });
+
+const changePassword = async (req, res) => {
+  const pass = `${req.body.pass}`;
+  const pass2 = `${req.body.pass2}`;
+
+  if (!pass || !pass2) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  if (pass !== pass2) {
+    return res.status(400).json({ error: 'Passwords do not match!' });
+  }
+
+  try {
+    const hash = await Account.generateHash(pass);
+    const search = { username: req.session.account.username };
+    const data = { password: hash };
+    const updatedAccount = await Account.findOneAndUpdate(search, data, { new: true }).exec();
+    req.session.account = updatedAccount.toAPI();
+    return res.json({});
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+};
+
+const togglePremium = async (req, res) => {
+  try {
+    const search = { username: req.session.account.username };
+    const data = { premium: !req.session.account.premium };
+    const updatedAccount = await Account.findOneAndUpdate(search, data, { new: true }).exec();
+    req.session.account = updatedAccount.toAPI();
+    return res.json({ premium: req.session.account.premium });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+};
+
+const getHasPremium = (req, res) => res.json({ premium: req.session.account.premium });
+
 module.exports = {
   loginPage,
   login,
   logout,
   signup,
   getToken,
+  isLoggedIn,
+  getUsername,
+  changePassword,
+  togglePremium,
+  getHasPremium,
 };

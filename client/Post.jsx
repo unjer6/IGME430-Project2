@@ -1,11 +1,9 @@
 // an individual post component
-const Post = ({author, content, likes, dislikes}) => {
+const Post = ({author, content }) => {
     return (
-        <div>
-            <h1>{author ? author : "Unknown"}</h1>
-            <p>{content ? content : "No content"}</p>
-            <p>Likes: {likes ? likes : 0}</p>
-            <p>Dislikes: {dislikes ? dislikes : 0}</p>
+        <div className="ms-3 p-2 mb-3 border">
+            <h1 className="fs-6 mb-0 fw-bold">{author ? author : "Unknown"}</h1>
+            <p className="fs-3 mb-0 lh-sm" style={{whiteSpace: 'pre-line'}}>{content ? content : "No content"}</p>
         </div>
     )
 };

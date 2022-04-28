@@ -6,9 +6,9 @@ const SignupForm = ({ csrf }) => {
         e.preventDefault();
         helper.hideError();
 
-        const username = e.target.querySelector('#user').value;
-        const pass = e.target.querySelector('#pass').value;
-        const pass2 = e.target.querySelector('#pass2').value;
+        const username = e.target.querySelector('#username').value;
+        const pass = e.target.querySelector('#password').value;
+        const pass2 = e.target.querySelector('#password2').value;
         const _csrf = e.target.querySelector('#_csrf').value;
     
         if(!username || !pass || !pass2) {
@@ -28,22 +28,26 @@ const SignupForm = ({ csrf }) => {
 
     return (
         <>
-        <h1>Sign Up</h1>
-        <form id="signupForm"
-            name="signupForm"
+        <form
             onSubmit={handleSignup}
-            action="/signup"
+            action="/login"
             method="POST"
-            className="mainForm"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
-            <label htmlFor="pass2">Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+            <legend>Sign Up</legend>
+            <div className="mb-3">
+                <label htmlFor="username" className="form-label">Username</label>
+                <input type="text" className="form-control" id="username" />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="password1" className="form-label">Password</label>
+                <input type="password" className="form-control" id="password1" />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="password2" className="form-label">Retype Password</label>
+                <input type="password" className="form-control" id="password2" />
+            </div>
             <input id="_csrf" type="hidden" name="_csrf" value={csrf} />
-            <input className="formSubmit" type="submit" value="Sign up" />
+            <button type="submit" className="btn btn-primary">Submit</button>
         </form>
         </>
     );

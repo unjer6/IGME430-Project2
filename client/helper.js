@@ -3,9 +3,25 @@
    end in an error.
 */
 const handleError = (message) => {
-    //document.getElementById('errorMessage').textContent = message;
-    //document.getElementById('domoMessage').classList.remove('hidden');
+    let errorMessage = document.querySelector('#errorMessage');
+    let errorContainer = document.querySelector('#errorContainer');
+    if (errorMessage) errorMessage.textContent = message;
+    if (errorContainer) errorContainer.classList.remove('d-none');
 };
+
+const handleSuccess = (message) => {
+    let successMessage = document.querySelector('#successMessage');
+    let successContainer = document.querySelector('#successContainer');
+    if (successMessage) successMessage.textContent = message;
+    if (successContainer) successContainer.classList.remove('d-none');
+};
+
+const hideSuccessAndError = () => {
+    let errorContainer = document.querySelector('#errorContainer');
+    let successContainer = document.querySelector('#successContainer');
+    if (errorContainer) errorContainer.classList.add('d-none');
+    if (successContainer) successContainer.classList.add('d-none');
+}
 
 /* Sends post requests to the server using fetch. Will look for various
     entries in the response JSON object, and will handle them appropriately.
@@ -44,13 +60,10 @@ const sendDelete = (url, data) => {
     });
 };
 
-const hideError = () => {
-    //document.getElementById('domoMessage').classList.add('hidden');
-};
-
 module.exports = {
     handleError,
+    handleSuccess,
+    hideSuccessAndError,
     sendPost,
     sendDelete,
-    hideError,
 };

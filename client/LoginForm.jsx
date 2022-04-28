@@ -5,10 +5,10 @@ const LoginForm = ({ csrf }) => {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        helper.hideError();
+        helper.hideSuccessAndError();
 
-        const username = e.target.querySelector('#user').value;
-        const pass = e.target.querySelector('#pass').value;
+        const username = e.target.querySelector('#username').value;
+        const pass = e.target.querySelector('#password').value;
         const _csrf = e.target.querySelector('#_csrf').value;
     
         if(!username || !pass) {
@@ -23,19 +23,22 @@ const LoginForm = ({ csrf }) => {
 
     return (
         <>
-        <h1>Login</h1>
-        <form id="loginForm"
-            name="loginForm"
+        <form
             onSubmit={handleLogin}
             action="/login"
             method="POST"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
+            <legend>Login</legend>
+            <div className="mb-3">
+                <label htmlFor="username" className="form-label">Username</label>
+                <input type="text" className="form-control" id="username" />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input type="password" className="form-control" id="password" />
+            </div>
             <input id="_csrf" type="hidden" name="_csrf" value={csrf} />
-            <input className="formSubmit" type="submit" value="Sign in" />
+            <button type="submit" className="btn btn-primary">Submit</button>
         </form>
         </>
     );

@@ -17,12 +17,15 @@ const router = (app) => {
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
+  app.get('/isLoggedIn', controllers.Account.isLoggedIn);
+  app.get('/getUsername', mid.requiresLogin, controllers.Account.getUsername);
+  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
+  app.get('/togglePremium', mid.requiresLogin, controllers.Account.togglePremium);
+  app.get('/getHasPremium', mid.requiresLogin, controllers.Account.getHasPremium);
 
   // routes that create or change post docs
   app.post('/post', mid.requiresLogin, controllers.Post.makePost);
-  app.delete('/deletePost', mid.requiresLogin, controllers.Post.deletePost);
   app.post('/like', mid.requiresLogin, controllers.Post.likePost);
-  app.post('/dislike', mid.requiresLogin, controllers.Post.dislikePost);
 
   // THE app home page. Contains post feed
   app.get('/', controllers.App.appPage);
@@ -32,7 +35,7 @@ const router = (app) => {
   // leaving this here as a reminder that we may redirect here from other routes if necessary
   app.get('/notFound', controllers.notFoundPage);
   // anything else is not found
-  app.get('*', controllers.notFoundPage);
+  app.get('/*', controllers.notFoundPage);
 };
 
 module.exports = router;

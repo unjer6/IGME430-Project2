@@ -10,11 +10,6 @@ const PostSchema = new mongoose.Schema({
     min: 0,
     default: 0,
   },
-  dislikes: {
-    type: Number,
-    min: 0,
-    default: 0,
-  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
