@@ -19,7 +19,6 @@ const AccountSchema = new mongoose.Schema({
   },
   premium: {
     type: Boolean,
-    required: true,
     default: false,
   },
   createdDate: {
